@@ -12,22 +12,36 @@ os.environ["PYTHONUTF8"] = "1"  # Force UTF-8 encoding
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 CONTEXT_FILE = ".autocommit"
+README_FILE = "README.md"
 GITIGNORE = ".gitignore"
 
-def check_context_file():
-    """Ensure .autocommit exists and is gitignored."""
-    if not Path(CONTEXT_FILE).exists():
-        print(f"⚠️  {CONTEXT_FILE} not found. Add project context with:")
+def get_project_context():
+    """Get project context from .autocommit and README.md if they exist."""
+    context_parts = []
+    
+    # Check .autocommit file
+    if Path(CONTEXT_FILE).exists():
+        if Path(GITIGNORE).exists():
+            with open(GITIGNORE, "r") as f:
+                if CONTEXT_FILE not in f.read():
+                    print(f"⚠️  Add '{CONTEXT_FILE}' to {GITIGNORE} to avoid committing it.")
+        
+        with open(CONTEXT_FILE, "r") as f:
+            context_parts.append(f.read().strip())
+    
+    # Check README.md file
+    if Path(README_FILE).exists():
+        with open(README_FILE, "r") as f:
+            readme_content = f.read().strip()
+            if readme_content:  # Only add if not empty
+                context_parts.append(f"README.md content:\n{readme_content}")
+    
+    if not context_parts:
+        print(f"⚠️  No project context found. Add context with:")
         print(f"   autocommit --context \"Your project description...\"")
         return None
     
-    if Path(GITIGNORE).exists():
-        with open(GITIGNORE, "r") as f:
-            if CONTEXT_FILE not in f.read():
-                print(f"⚠️  Add '{CONTEXT_FILE}' to {GITIGNORE} to avoid committing it.")
-    
-    with open(CONTEXT_FILE, "r") as f:
-        return f.read().strip()
+    return "\n\n".join(context_parts)
 
 def save_context(context):
     """Save --context to .autocommit."""
@@ -83,7 +97,7 @@ def main():
         save_context(args.context)
         return
 
-    context = check_context_file()
+    context = get_project_context()
     if context is None:
         exit(1)
 
