@@ -17,10 +17,15 @@ DEEPSEEK_API_KEY=<your-api-key>
 ```bash
 pip install pyinstaller requests dotenv
 ```
-4. 'Compile' python file to binaries via this command:
+4. 'Compile' python file to binaries via this command.:
 ```bash
-pyinstaller --onefile main.py
+pyinstaller --onefile autocommit.py
 ```
+If errors occur (e.g. "ERROR: Aborting build process due to attempt to collect multiple Qt bindings packages: ..."), add the --exclude flag to unnecessary packages (this project only uses requests and dotenv):
+```bash
+pyinstaller --onefile --exclude PyQt5 --exclude PySide6 autocommit.py
+```
+
 5. Add output directory (```dist/```) to Path
 6. Set up context for your project:
 ```bash
