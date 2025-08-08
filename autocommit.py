@@ -91,6 +91,7 @@ def generate_commit_message(diff, context=None):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--context", help="Set project context (saved to .autocommit)")
+    parser.add_argument("--push", action="store_true", help="Push after commit (with confirmation)")
     args = parser.parse_args()
 
     if args.context:
@@ -103,14 +104,32 @@ def main():
 
     diff = get_git_diff()
     if not diff:
-        print("❌ No text changes detected. Stage changes with 'git add'.")
-        exit(1)
+        # Check for unstaged changes
+        unstaged = subprocess.run(["git", "diff", "--no-color"], capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.strip()
+        if unstaged:
+            print("❌ No staged changes detected, but there are unstaged changes.")
+            if input("Stage all changes with 'git add .'? [Y/n]: ").lower() in ("", "y", "yes"):
+                subprocess.run(["git", "add", "."], check=True)
+                diff = get_git_diff()
+                if not diff:
+                    print("❌ Still no staged changes. Exiting.")
+                    exit(1)
+            else:
+                print("❌ No changes staged. Exiting.")
+                exit(1)
+        else:
+            print("❌ No text changes detected. Stage changes with 'git add'.")
+            exit(1)
 
     message = generate_commit_message(diff, context)
     print(f"\n📝 Suggested commit:\n\t{message}\n")
     if input("Commit? [Y/n]: ").lower() in ("", "y", "yes"):
         subprocess.run(["git", "commit", "-m", message], check=True)
-        print("✅ Done!")
+        print("✅ Commit done!")
+        if args.push:
+            if input("Push to remote? [Y/n]: ").lower() in ("", "y", "yes"):
+                subprocess.run(["git", "push"], check=True)
+                print("🚀 Pushed!")
 
 if __name__ == "__main__":
     main()

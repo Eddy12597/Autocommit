@@ -24,7 +24,7 @@ DEEPSEEK_API_KEY=<your-api-key>
 ```bash
 pip install pyinstaller requests dotenv
 ```
-4. 'Compile' python file to binaries via this command.:
+4. 'Compile' python file to binaries via this command. This may take around 40~80 seconds:
 ```bash
 pyinstaller --onefile autocommit.py
 ```
@@ -41,7 +41,12 @@ autocommit --context <your-project-context>
 ```bash
 git add . # or your specific files to add to stage.
 ```
-8. Autocommit and verify commit message. If you don't like it, you can change the file named `.autocommit` which stores project context, or you can manually create a commit message.
+8. Autocommit and verify commit message. If you don't like it, you can change the file named `.autocommit` which stores project context, or you can manually create a commit message. This takes about 5~10 seconds.
 ```bash
 autocommit
 ```
+
+---
+Todo/Future:
+1. Enhance error/exception management for clearer error messages
+2. Rewrite in a compiled language to save compilation time
