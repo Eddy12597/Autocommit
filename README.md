@@ -1,8 +1,12 @@
 # Autocommit
 
-Automatic commit message generation tool powered by AI. Will support multiple AI models (GPT, DeepSeek, Gemini, Llama, etc.)
+#### !! This is not a spam tool for boosting your github activity !!
+
+This is an automatic commit message generation tool powered by AI. Will support multiple AI models (GPT, DeepSeek, Gemini, Llama, etc.)
 
 This project's commit messages will almost always be generated from this tool.
+
+This tool works by looking at ```git diff```'s, analyzing the differences, tying them with context, and generating a commit message. For better context enrichment for the commit generator, consider adding more comments to your code.
 
 ---
 
@@ -28,7 +32,6 @@ If errors occur (e.g. "ERROR: Aborting build process due to attempt to collect m
 ```bash
 pyinstaller --onefile --exclude PyQt5 --exclude PySide6 autocommit.py
 ```
-
 5. Add output directory (```dist/```) to Path
 6. Set up context for your project:
 ```bash
