@@ -7,7 +7,10 @@ This project's commit messages will almost always be generated from this tool.
 ---
 
 ## Setup
-
+First, clone the repository: 
+```bash
+git clone https://github.com/Eddy12597/Autocommit.git
+```
 1. For now, this project only supports DeepSeek API (DeepSeek's API pricing is significantly lower than that of ChatGPT's, and DeepSeek is very much feasible for a simple task like generating a commit message, which might require large inputs for large changes. Get an api from the [Deepseek Platform](https://api-docs.deepseek.com/zh-cn/api/deepseek-api/))
 2. Add your API key to the .env file:
 ```env
