@@ -86,6 +86,8 @@ def generate_commit_message(diff, context=None):
         return response.json()["choices"][0]["message"]["content"].strip('"\' \n')
     except Exception as e:
         print(f"❌ API error: {e}")
+        print("Consider checking if API key i correct")
+        print(f"API Response: {response}")
         exit(1)
 
 def main():
