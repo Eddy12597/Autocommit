@@ -7,9 +7,15 @@ import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
-script_dir = Path(__file__).parent
-load_dotenv(script_dir / '.env') 
+script_dir = Path(__file__).parent.resolve()
+load_dotenv(script_dir / '.env', encoding='utf-8-sig') 
 # load_dotenv()
+
+
+# print(f"Script directory: {script_dir}")  # Should show D:\Testing\deepseek-commit
+# print(f"All environment vars: {dict(os.environ)}")  # Show ALL loaded variables
+# print(f"API Key: {repr(os.getenv('DEEPSEEK_API_KEY'))}")  # Show raw key value}}}
+
 os.environ["PYTHONUTF8"] = "1"  # Force UTF-8 encoding
 
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")

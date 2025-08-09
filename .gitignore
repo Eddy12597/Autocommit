@@ -5,5 +5,5 @@
 .autocommit
 build/*
 dist/*
-*.spec
+# *.spec (excludes problematic packages)
 
