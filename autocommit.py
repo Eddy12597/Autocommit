@@ -3,6 +3,7 @@ import subprocess
 import argparse
 import requests
 import json
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -67,7 +68,7 @@ def get_git_diff():
 def generate_commit_message(diff, context=None):
     """Call DeepSeek with project context."""
     system_prompt = (
-            "Generate a concise Git commit message using conventional commits (fix:, feat:, doc:, etc.). "
+        "Generate a concise Git commit message using conventional commits (fix:, feat:, doc:, etc.). "
         f"Project context: {context}\n\nChanges:"
     )
     payload = {
@@ -80,15 +81,20 @@ def generate_commit_message(diff, context=None):
     try:
         response = requests.post(
             DEEPSEEK_API_URL,
-            headers={"Authorization": f"Bearer {DEEPSEEK_API_KEY}"},
+            headers={
+                "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+                "Content-Type": "application/json"
+            },
             json=payload
         )
+        response.raise_for_status()  # This will raise an exception for 4XX/5XX status codes
         return response.json()["choices"][0]["message"]["content"].strip('"\' \n')
+    except requests.exceptions.HTTPError as http_err:
+        print(f"❌ HTTP error occurred: {http_err}")
+        print(f"Response: {response.text}")
     except Exception as e:
         print(f"❌ API error: {e}")
-        print("Consider checking if API key i correct")
-        print(f"API Response: {response}")
-        exit(1)
+    sys.exit(1)
 
 def main():
     parser = argparse.ArgumentParser()
