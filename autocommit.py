@@ -8,8 +8,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 script_dir = Path(__file__).parent
-load_dotenv(script_dir / '.env')  # First try script directory
-load_dotenv()
+load_dotenv(script_dir / '.env') 
+# load_dotenv()
 os.environ["PYTHONUTF8"] = "1"  # Force UTF-8 encoding
 
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
