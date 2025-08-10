@@ -76,7 +76,7 @@ def get_git_diff():
 def generate_commit_message(diff, context=None):
     """Call DeepSeek with project context."""
     system_prompt = (
-        "Generate a concise Git commit message using conventional commits (fix:, feat:, doc:, etc.). Do not include other words / sentences, only give the commit message and description, if needed."
+        "Generate a concise Git commit message using conventional commits (fix:, feat:, doc:, etc.). Do not include other words / sentences, only give the commit message and description, if needed. Do not include things like 'Heres a commit message', just give me the message and description."
         f"Project context: {context}\n\nChanges:"
     )
     payload = {
